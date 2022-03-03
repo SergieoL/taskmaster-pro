@@ -178,4 +178,44 @@ $("#remove-tasks").on("click", function() {
 // load tasks for the first time
 loadTasks();
 
+$(".card .list-group").sortable({
+  connectWith: $(".card .list-group"),
+  
+  update: function(event) {
+
+    var tempArr = [];
+
+    $(this).children().each(function(){
+      var text = $(this)
+        .find("p")
+        .text()
+        .trim();
+
+      var date = $(this)
+        .find("span")
+        .text()
+        .trim();
+      
+      tempArr.push({
+        text: text,
+        date: date
+      })
+    })
+    var arrName = $(this)
+      .attr("id")
+      .replace("list-", "");
+
+    tasks[arrName] = tempArr;
+    saveTasks();
+  }
+});
+
+$("#trash").droppable({
+  accept: ".card .list-group-item",
+  tolerance: "touch",
+  drop: function(event, ui) {
+    ui.draggable.remove();
+  }
+})
+
 
